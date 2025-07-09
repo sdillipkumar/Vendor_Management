@@ -1,0 +1,253 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="p-6 animate-fade-in">
+  <!-- Header Section -->
+  <div class="mb-8 flex flex-col md:flex-row justify-between items-start md:items-end border-b border-gray-200 dark:border-gray-700 pb-6">
+    <div>
+      <h1 class="text-3xl font-bold text-gray-800 dark:text-white mb-2">{{ vendor.name }}</h1>
+      <div class="flex items-center space-x-4">
+        <span class="px-3 py-1 bg-indigo-100 dark:bg-indigo-900 text-indigo-800 dark:text-indigo-200 rounded-full text-sm font-medium">
+          Vendor Code: {{ vendor.vendor_code }}
+        </span>
+        <span class="text-gray-500 dark:text-gray-400 text-sm">
+          <i class="fas fa-calendar-alt mr-1"></i> Registered on {{ vendor.created_at|date:"F j, Y" }}
+        </span>
+      </div>
+    </div>
+    <div class="mt-4 md:mt-0">
+      <button class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2 rounded-lg transition-all flex items-center">
+        <i class="fas fa-file-invoice-dollar mr-2"></i> Create Purchase Order
+      </button>
+    </div>
+  </div>
+
+  <!-- Main Content Grid -->
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <!-- Left Column - Vendor Information -->
+    <div class="lg:col-span-2 space-y-6">
+      <!-- Contact Card -->
+      <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6 transition-all hover:shadow-lg">
+        <h2 class="text-xl font-semibold text-gray-800 dark:text-white mb-4 flex items-center">
+          <i class="fas fa-address-card mr-2 text-indigo-600 dark:text-indigo-400"></i>
+          Contact Information
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <h3 class="text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">Primary Contact</h3>
+            <p class="text-gray-800 dark:text-gray-200">{{ vendor.contact_details|linebreaksbr }}</p>
+          </div>
+          <div>
+            <h3 class="text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">Physical Address</h3>
+            <p class="text-gray-800 dark:text-gray-200">{{ vendor.address|linebreaksbr }}</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Performance Metrics -->
+      <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6 transition-all hover:shadow-lg">
+        <h2 class="text-xl font-semibold text-gray-800 dark:text-white mb-6 flex items-center">
+          <i class="fas fa-chart-line mr-2 text-indigo-600 dark:text-indigo-400"></i>
+          Performance Metrics
+        </h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4">
+          <!-- Delivery Rate -->
+          <div class="bg-gradient-to-r from-indigo-50 to-indigo-100 dark:from-indigo-900 dark:to-indigo-800 p-4 rounded-lg">
+            <div class="flex justify-between items-start">
+              <div>
+                <p class="text-sm font-medium text-indigo-600 dark:text-indigo-300">Delivery Rate</p>
+                <h3 class="text-3xl font-bold text-indigo-800 dark:text-white mt-1">{{ vendor.on_time_delivery_rate|floatformat:1 }}%</h3>
+              </div>
+              <div class="bg-white dark:bg-indigo-700 p-2 rounded-full">
+                <i class="fas fa-truck text-indigo-600 dark:text-white"></i>
+              </div>
+            </div>
+            <div class="mt-4">
+              <div class="h-2 bg-indigo-200 dark:bg-indigo-600 rounded-full overflow-hidden">
+                <div class="h-full bg-indigo-600 dark:bg-indigo-400" style="width: {{ vendor.on_time_delivery_rate|floatformat:0 }}%"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Quality Rating -->
+          <div class="bg-gradient-to-r from-green-50 to-green-100 dark:from-green-900 dark:to-green-800 p-4 rounded-lg">
+            <div class="flex justify-between items-start">
+              <div>
+                <p class="text-sm font-medium text-green-600 dark:text-green-300">Quality Rating</p>
+                <h3 class="text-3xl font-bold text-green-800 dark:text-white mt-1">{{ vendor.quality_rating_avg|floatformat:1 }}/5</h3>
+              </div>
+              <div class="bg-white dark:bg-green-700 p-2 rounded-full">
+                <i class="fas fa-star text-green-600 dark:text-white"></i>
+              </div>
+            </div>
+            <div class="mt-4">
+              <div class="flex items-center">
+                {% with stars=vendor.quality_rating_avg|floatformat:0 %}
+                  {% for i in "12345" %}
+                    <i class="fas fa-star text-{% if forloop.counter <= stars %}yellow-400{% else %}gray-300 dark:text-gray-500{% endif %}"></i>
+                  {% endfor %}
+                {% endwith %}
+              </div>
+            </div>
+          </div>
+
+          <!-- Response Time -->
+          <div class="bg-gradient-to-r from-yellow-50 to-yellow-100 dark:from-yellow-900 dark:to-yellow-800 p-4 rounded-lg">
+            <div class="flex justify-between items-start">
+              <div>
+                <p class="text-sm font-medium text-yellow-600 dark:text-yellow-300">Avg Response</p>
+                <h3 class="text-3xl font-bold text-yellow-800 dark:text-white mt-1">{{ vendor.average_response_time|floatformat:1 }}h</h3>
+              </div>
+              <div class="bg-white dark:bg-yellow-700 p-2 rounded-full">
+                <i class="fas fa-stopwatch text-yellow-600 dark:text-white"></i>
+              </div>
+            </div>
+            <div class="mt-4">
+              <div class="flex items-center text-yellow-600 dark:text-yellow-300">
+                <i class="fas fa-arrow-down mr-1"></i>
+                <span class="text-sm">From {{ vendor.average_response_time|add:2|floatformat:1 }}h last quarter</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Fulfillment Rate -->
+          <div class="bg-gradient-to-r from-blue-50 to-blue-100 dark:from-blue-900 dark:to-blue-800 p-4 rounded-lg">
+            <div class="flex justify-between items-start">
+              <div>
+                <p class="text-sm font-medium text-blue-600 dark:text-blue-300">Fulfillment Rate</p>
+                <h3 class="text-3xl font-bold text-blue-800 dark:text-white mt-1">{{ vendor.fulfillment_rate|floatformat:1 }}%</h3>
+              </div>
+              <div class="bg-white dark:bg-blue-700 p-2 rounded-full">
+                <i class="fas fa-check-circle text-blue-600 dark:text-white"></i>
+              </div>
+            </div>
+            <div class="mt-4">
+              <div class="h-2 bg-blue-200 dark:bg-blue-600 rounded-full overflow-hidden">
+                <div class="h-full bg-blue-600 dark:bg-blue-400" style="width: {{ vendor.fulfillment_rate|floatformat:0 }}%"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Column - Actions and History -->
+    <div class="space-y-6">
+      <!-- Vendor Actions -->
+      <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6 transition-all hover:shadow-lg">
+        <h2 class="text-xl font-semibold text-gray-800 dark:text-white mb-4 flex items-center">
+          <i class="fas fa-cog mr-2 text-indigo-600 dark:text-indigo-400"></i>
+          Vendor Actions
+        </h2>
+        <div class="space-y-3">
+          <a href="{% url 'vendor_list' %}" class="flex items-center justify-between px-4 py-3 bg-gray-50 dark:bg-gray-700 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors">
+            <span>
+              <i class="fas fa-list mr-3 text-gray-500 dark:text-gray-300"></i>
+              Back to Vendor List
+            </span>
+            <i class="fas fa-chevron-right text-gray-400"></i>
+          </a>
+          <a href="#" class="flex items-center justify-between px-4 py-3 bg-gray-50 dark:bg-gray-700 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors">
+            <span>
+              <i class="fas fa-edit mr-3 text-blue-500"></i>
+              Edit Vendor Details
+            </span>
+            <i class="fas fa-chevron-right text-gray-400"></i>
+          </a>
+          <a href="#" class="flex items-center justify-between px-4 py-3 bg-gray-50 dark:bg-gray-700 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors">
+            <span>
+              <i class="fas fa-file-alt mr-3 text-green-500"></i>
+              View Contracts
+            </span>
+            <i class="fas fa-chevron-right text-gray-400"></i>
+          </a>
+          <a href="#" class="flex items-center justify-between px-4 py-3 bg-gray-50 dark:bg-gray-700 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors">
+            <span>
+              <i class="fas fa-file-invoice mr-3 text-purple-500"></i>
+              Order History
+            </span>
+            <i class="fas fa-chevron-right text-gray-400"></i>
+          </a>
+        </div>
+      </div>
+
+      <!-- Recent Activity -->
+      <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6 transition-all hover:shadow-lg">
+        <h2 class="text-xl font-semibold text-gray-800 dark:text-white mb-4 flex items-center">
+          <i class="fas fa-history mr-2 text-indigo-600 dark:text-indigo-400"></i>
+          Recent Activity
+        </h2>
+        <div class="space-y-4">
+          <div class="flex items-start">
+            <div class="bg-indigo-100 dark:bg-indigo-900 p-2 rounded-full mr-3">
+              <i class="fas fa-file-invoice text-indigo-600 dark:text-indigo-300"></i>
+            </div>
+            <div>
+              <h4 class="font-medium text-gray-800 dark:text-white">PO #2023-0412 created</h4>
+              <p class="text-sm text-gray-500 dark:text-gray-400">2 days ago</p>
+              <p class="text-sm mt-1">For $3,450.00 - Due Nov 30, 2023</p>
+            </div>
+          </div>
+          <div class="flex items-start">
+            <div class="bg-green-100 dark:bg-green-900 p-2 rounded-full mr-3">
+              <i class="fas fa-check-circle text-green-600 dark:text-green-300"></i>
+            </div>
+            <div>
+              <h4 class="font-medium text-gray-800 dark:text-white">PO #2023-0387 fulfilled</h4>
+              <p class="text-sm text-gray-500 dark:text-gray-400">1 week ago</p>
+              <p class="text-sm mt-1">Early delivery with 5/5 rating</p>
+            </div>
+          </div>
+          <div class="flex items-start">
+            <div class="bg-yellow-100 dark:bg-yellow-900 p-2 rounded-full mr-3">
+              <i class="fas fa-exclamation-triangle text-yellow-600 dark:text-yellow-300"></i>
+            </div>
+            <div>
+              <h4 class="font-medium text-gray-800 dark:text-white">Quality issue reported</h4>
+              <p class="text-sm text-gray-500 dark:text-gray-400">2 weeks ago</p>
+              <p class="text-sm mt-1">Batch #2431 received 3.5/5 rating</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .animate-fade-in {
+    animation: fadeIn 0.6s ease-out forwards;
+  }
+  
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  
+  .metric-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .metric-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  }
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Interactive elements can be enhanced here
+    const metricCards = document.querySelectorAll('.metric-card');
+    metricCards.forEach(card => {
+      card.addEventListener('mouseenter', function() {
+        this.classList.add('shadow-lg');
+      });
+      card.addEventListener('mouseleave', function() {
+        this.classList.remove('shadow-lg');
+      });
+    });
+    
+    // Initialize any tooltips or popovers
+  });
+</script>
+{% endblock %}

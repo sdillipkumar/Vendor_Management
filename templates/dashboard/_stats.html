@@ -1,0 +1,103 @@
+<!-- Metrics Cards -->
+
+ <!-- 🔢 Total Vendors -->
+  <div class="bg-white dark:bg-gray-800 shadow rounded-xl p-5 transition hover:shadow-xl duration-300">
+    <div class="flex items-center space-x-4">
+      <div class="bg-indigo-100 dark:bg-indigo-900 p-2 rounded-full">
+        <i class="fas fa-users text-indigo-600 dark:text-indigo-300"></i>
+      </div>
+      <div>
+        <h3 class="text-sm text-gray-500 dark:text-gray-400">Total Vendors</h3>
+        <p class="text-2xl font-bold text-indigo-600 dark:text-indigo-400">{{ total_vendors }}</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 📦 Purchase Orders -->
+  <div class="bg-white dark:bg-gray-800 shadow rounded-xl p-5 transition hover:shadow-xl duration-300">
+    <div class="flex items-center space-x-4">
+      <div class="bg-blue-100 dark:bg-blue-900 p-2 rounded-full">
+        <i class="fas fa-file-invoice text-blue-600 dark:text-blue-300"></i>
+      </div>
+      <div>
+        <h3 class="text-sm text-gray-500 dark:text-gray-400">Purchase Orders</h3>
+        <p class="text-2xl font-bold text-blue-600 dark:text-blue-400">{{ total_purchase_orders }}</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ⏳ Pending Approvals -->
+  <div class="bg-white dark:bg-gray-800 shadow rounded-xl p-5 transition hover:shadow-xl duration-300">
+    <div class="flex items-center space-x-4">
+      <div class="bg-yellow-100 dark:bg-yellow-900 p-2 rounded-full">
+        <i class="fas fa-clock text-yellow-600 dark:text-yellow-300"></i>
+      </div>
+      <div>
+        <h3 class="text-sm text-gray-500 dark:text-gray-400">Pending Approvals</h3>
+        <p class="text-2xl font-bold text-yellow-500 dark:text-yellow-400">{{ pending_orders }}</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ⭐ Avg. Rating -->
+  <div class="bg-white dark:bg-gray-800 shadow rounded-xl p-5 transition hover:shadow-xl duration-300">
+    <div class="flex items-center space-x-4">
+      <div class="bg-green-100 dark:bg-green-900 p-2 rounded-full">
+        <i class="fas fa-star text-green-600 dark:text-green-300"></i>
+      </div>
+      <div>
+        <h3 class="text-sm text-gray-500 dark:text-gray-400">Avg. Vendor Rating</h3>
+        <p class="text-2xl font-bold text-green-600 dark:text-green-400">{{ average_rating|floatformat:1 }}</p>
+      </div>
+    </div>
+  </div> <!-- 🔢 Total Vendors -->
+  <div class="bg-white dark:bg-gray-800 shadow rounded-xl p-5 transition hover:shadow-xl duration-300">
+    <div class="flex items-center space-x-4">
+      <div class="bg-indigo-100 dark:bg-indigo-900 p-2 rounded-full">
+        <i class="fas fa-users text-indigo-600 dark:text-indigo-300"></i>
+      </div>
+      <div>
+        <h3 class="text-sm text-gray-500 dark:text-gray-400">Total Vendors</h3>
+        <p class="text-2xl font-bold text-indigo-600 dark:text-indigo-400">{{ total_vendors }}</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 📦 Purchase Orders -->
+  <div class="bg-white dark:bg-gray-800 shadow rounded-xl p-5 transition hover:shadow-xl duration-300">
+    <div class="flex items-center space-x-4">
+      <div class="bg-blue-100 dark:bg-blue-900 p-2 rounded-full">
+        <i class="fas fa-file-invoice text-blue-600 dark:text-blue-300"></i>
+      </div>
+      <div>
+        <h3 class="text-sm text-gray-500 dark:text-gray-400">Purchase Orders</h3>
+        <p class="text-2xl font-bold text-blue-600 dark:text-blue-400">{{ total_purchase_orders }}</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ⏳ Pending Approvals -->
+  <div class="bg-white dark:bg-gray-800 shadow rounded-xl p-5 transition hover:shadow-xl duration-300">
+    <div class="flex items-center space-x-4">
+      <div class="bg-yellow-100 dark:bg-yellow-900 p-2 rounded-full">
+        <i class="fas fa-clock text-yellow-600 dark:text-yellow-300"></i>
+      </div>
+      <div>
+        <h3 class="text-sm text-gray-500 dark:text-gray-400">Pending Approvals</h3>
+        <p class="text-2xl font-bold text-yellow-500 dark:text-yellow-400">{{ pending_orders }}</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ⭐ Avg. Rating -->
+  <div class="bg-white dark:bg-gray-800 shadow rounded-xl p-5 transition hover:shadow-xl duration-300">
+    <div class="flex items-center space-x-4">
+      <div class="bg-green-100 dark:bg-green-900 p-2 rounded-full">
+        <i class="fas fa-star text-green-600 dark:text-green-300"></i>
+      </div>
+      <div>
+        <h3 class="text-sm text-gray-500 dark:text-gray-400">Avg. Vendor Rating</h3>
+        <p class="text-2xl font-bold text-green-600 dark:text-green-400">{{ average_rating|floatformat:1 }}</p>
+      </div>
+    </div>
+  </div>

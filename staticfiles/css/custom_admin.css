@@ -1,0 +1,55 @@
+/* Sidebar background with a gradient */
+.main-sidebar {
+    background: linear-gradient(135deg, #db8727, #ff6f61) !important;
+    color: #fff !important;
+}
+
+/* Active sidebar item */
+.main-sidebar .nav-item .nav-link.active {
+    background-color: rgba(255, 255, 255, 0.2) !important;
+    border-left: 4px solid #fff !important;
+    font-weight: bold;
+}
+
+/* Sidebar links hover */
+.main-sidebar .nav-item .nav-link:hover {
+    background-color: rgba(224, 66, 66, 0.1) !important;
+    color: #ffffff !important;
+}
+
+/* Top navbar */
+.navbar {
+    background-color: #4f46e5 !important; /* Indigo */
+    color: #fff !important;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* Navbar text/logo */
+.navbar .nav-link,
+.brand-link .brand-text {
+    color: #9be01b !important;
+    font-weight: bold;
+}
+
+/* Customize form field labels */
+.control-label {
+    color: #333;
+    font-weight: 600;
+}
+
+/* Header logo text */
+.brand-link .brand-text {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #ffffff !important;
+}
+
+/* Footer or copyright */
+.main-footer {
+    background-color: #ca35a5;
+    color: #4b5563;
+    text-align: center;
+    font-size: 0.875rem;
+    padding: 0.75rem;
+    border-top: 1px solid #e5e7eb;
+}

@@ -1,0 +1,143 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const categoryButtons = document.querySelectorAll('.category-btn');
+  const searchForm = document.getElementById('searchFilterForm');
+  const vendorContainer = document.getElementById('vendorCardsContainer');
+  let selectedCategory = "{{ selected_category|escapejs }}";
+
+  function fetchVendors(page = 1) {
+    const search = document.getElementById('searchInput').value;
+
+    fetch(`?search=${encodeURIComponent(search)}&category=${encodeURIComponent(selectedCategory)}&page=${page}`, {
+      headers: {
+        'X-Requested-With': 'XMLHttpRequest'
+      }
+    })
+    .then(res => res.json())
+    .then(data => {
+      vendorContainer.innerHTML = data.html;
+      attachPaginationEvents();  // Rebind after update
+    });
+  }
+
+  categoryButtons.forEach(button => {
+    button.addEventListener('click', () => {
+      categoryButtons.forEach(btn => btn.classList.remove('bg-indigo-100', 'text-indigo-600', 'active'));
+      button.classList.add('bg-indigo-100', 'text-indigo-600', 'active');
+      selectedCategory = button.dataset.category;
+      fetchVendors();  // Reset to first page
+    });
+  });
+
+  searchForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    fetchVendors();  // Reset to first page
+  });
+
+  function attachPaginationEvents() {
+    document.querySelectorAll('.pagination-btn').forEach(button => {
+      button.addEventListener('click', () => {
+        const page = button.dataset.page;
+        fetchVendors(page);
+      });
+    });
+  }
+
+  attachPaginationEvents(); // Initial load
+});
+</script>
+
+
+<div class="p-6 animate-fade-in">
+  <!-- Header Section -->
+  <div class="mb-8 text-center">
+    <h1 class="text-3xl font-bold text-gray-800 dark:text-white mb-2">Vendor Directory</h1>
+    <p class="text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
+      Browse our trusted network of vendors and service providers
+    </p>
+  </div>
+
+  <!-- Search and Filter Section -->
+<!-- Search Form -->
+<form id="searchFilterForm" class="mb-8 bg-white dark:bg-gray-800 rounded-xl shadow-md p-6 transition-all duration-300">
+  <div class="flex flex-col md:flex-row gap-4 mb-6">
+    <div class="relative flex-grow">
+      <input type="text" name="search" id="searchInput" value="{{ search_query }}" placeholder="Search vendors..."
+             class="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-transparent focus:border-indigo-500 transition-all dark:text-white">
+      <i class="fas fa-search absolute right-3 top-3 text-gray-400"></i>
+    </div>
+    <button type="submit"
+            class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-lg transition-all flex items-center justify-center">
+      <i class="fas fa-filter mr-2"></i> Filter
+    </button>
+  </div>
+</form>
+
+<!-- Category Buttons -->
+<div class="flex flex-wrap gap-2 mb-6" id="categoryButtons">
+  {% for cat in categories %}
+    <button 
+      type="button"
+      class="category-btn px-4 py-2 rounded-full transition-all 
+             {% if selected_category == cat %}bg-indigo-100 text-indigo-600 active{% else %}bg-gray-100 text-gray-600 hover:bg-gray-200{% endif %}"
+      data-category="{{ cat }}">
+      {{ cat }}
+    </button>
+  {% endfor %}
+</div>
+
+
+<div id="vendorCardsContainer">
+  {% include 'dashboard/_vendor_cards.html' %}
+</div>
+
+
+
+<script>
+  // Initialize animations and interactions
+  document.addEventListener('DOMContentLoaded', function() {
+    // Category filter buttons
+    const categoryButtons = document.querySelectorAll('.category-btn');
+    categoryButtons.forEach(button => {
+      button.addEventListener('click', function() {
+        categoryButtons.forEach(btn => btn.classList.remove('active'));
+        this.classList.add('active');
+      });
+    });
+
+    // Favorite toggle functionality
+    const favoriteIcons = document.querySelectorAll('.fa-heart, .far-heart');
+    favoriteIcons.forEach(icon => {
+      icon.addEventListener('click', function(e) {
+        e.stopPropagation();
+        if (this.classList.contains('far')) {
+          this.classList.remove('far');
+          this.classList.add('fas', 'text-red-500');
+        } else {
+          this.classList.remove('fas', 'text-red-500');
+          this.classList.add('far', 'text-gray-400');
+        }
+      });
+    });
+  });
+</script>
+
+<style>
+  .animate-fade-in {
+    animation: fadeIn 0.6s ease-out forwards;
+  }
+  
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  
+  .vendor-card {
+    transition: all 0.3s ease;
+  }
+</style>
+{% endblock %}

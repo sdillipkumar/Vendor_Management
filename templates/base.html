@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+   <meta charset="UTF-8">
+<title>Vendor Management System</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com"></script>
+<!-- ✅ Add custom style block below -->
+  <style>
+    .sidebar-container .h-10 {
+      transition: transform 0.3s ease-in-out;
+    }
+
+    .sidebar-container .h-10:hover {
+      transform: scale(1.05);
+    }
+
+    /* Optional: Hover effect for sidebar links */
+    .sidebar-container a:hover {
+      color: #f9a8d4; /* Tailwind pink-300 */
+    }
+  </style>
+<!-- Font Awesome 6.5 CSS (ONLY this is needed) -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <script>
+      tailwind.config = {
+        darkMode: 'class',
+        theme: {
+          extend: {
+            colors: {
+              primary: '#6366f1',
+              secondary: '#8b5cf6',
+              accent: '#10b981',
+              dark: '#0f172a',
+              light: '#f8fafc'
+            },
+            animation: {
+              'fade-in': 'fadeIn 0.5s ease-in',
+              'slide-in': 'slideIn 0.3s ease-out',
+              'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite'
+            }
+          }
+        }
+      }
+    </script>
+    <style>
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .animate-fade-in {
+      animation: fadeIn 0.6s ease-in-out both;
+    }
+  </style>
+  
+</head>
+<body class="bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 text-gray-800 dark:text-gray-100 transition-colors duration-500">
+
+
+<!-- Floating Particles Background -->
+<div id="particles-js" class="fixed inset-0 -z-10 opacity-20 dark:opacity-10"></div>
+
+<!-- Mobile Header -->
+<div class="md:hidden p-4 bg-gradient-to-r from-indigo-600 to-purple-600 text-white flex justify-between items-center shadow-lg sticky top-0 z-20">
+  <h2 class="text-2xl font-bold">
+    <a href="{% url 'dashboard' %}" class="text-white hover:text-accent transition-all duration-300 flex items-center">
+      <i class="fas fa-store mr-2"></i> VMS
+    </a>
+  </h2>
+
+  <button onclick="toggleSidebar()" class="focus:outline-none hover:scale-110 transition-transform">
+    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M4 6h16M4 12h16M4 18h16"/>
+    </svg>
+  </button>
+</div>
+
+
+<!-- Sidebar -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Animated Sidebar</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateX(-20px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+    .sidebar-item {
+      animation: fadeIn 0.4s ease-out forwards;
+      animation-delay: calc(var(--order) * 0.1s);
+    }
+    .pink-accent {
+      height: 4px;
+      background: linear-gradient(90deg, transparent, #ec4899, transparent);
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      transition: all 0.3s ease;
+    }
+    .sidebar-container:hover .pink-accent {
+      transform: scaleX(1.1);
+    }
+  </style>
+</head>
+<body>
+  <!-- Sidebar -->
+  <div class="flex flex-col w-64 h-screen px-4 py-8 bg-gradient-to-b from-gray-950 via-gray-900 to-gray-800 text-white fixed z-30 shadow-2xl ring-1 ring-gray-700/40 backdrop-blur-md sidebar-container">
+
+    <!-- Pink accent at bottom -->
+    <div class="pink-accent"></div>
+    
+    <!-- Header -->
+    <div class="flex items-center justify-between mb-10 px-2">
+      <h2 class="text-2xl font-bold tracking-wide">
+      <!-- Admin/User Info -->
+<div class="mb-8 px-2">
+  {% if request.user.is_authenticated %}
+    <div class="flex items-center space-x-3">
+      <div class="h-10 w-10 rounded-full bg-pink-400 flex items-center justify-center text-white font-bold shadow">
+        {{ request.user.first_name|default:request.user.username|slice:":1" }}
+      </div>
+      <div>
+        <p class="text-sm font-medium">{{ request.user.get_full_name|default:request.user.username }}</p>
+        <p class="text-xs text-pink-200">
+          {% if request.user.is_superuser %}
+            Administrator
+          {% elif request.user.is_staff %}
+            Admin
+          {% else %}
+            Vendor
+          {% endif %}
+        </p>
+      </div>
+    </div>
+  {% endif %}
+</div>
+
+        <a href="{% url 'home' %}" class="hover:text-pink-200 transition-all duration-300 flex items-center">
+          <i class="fas fa-store mr-2 text-pink-300"></i> 
+          <span class="relative">
+            VMS
+            <span class="absolute -bottom-1 left-0 w-full h-0.5 bg-pink-300 transform scale-x-0 origin-left transition-transform duration-300 group-hover:scale-x-100"></span>
+          </span>
+        </a>
+      </h2>
+      <button class="md:hidden focus:outline-none hover:text-pink-200 transition-colors">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+
+    <!-- Sidebar Navigation -->
+    <!-- Dark Sidebar Navigation -->
+<nav class="flex flex-col space-y-2 bg-gradient-to-b from-gray-950 via-gray-900 to-gray-800 p-4 rounded-lg border-r border-gray-700 shadow-2xl backdrop-blur-md text-white">
+
+  
+  <!-- Dashboard -->
+  <a href="{% url 'dashboard' %}" 
+     class="relative flex items-center px-4 py-3 rounded-lg transition-all duration-500 hover:bg-gradient-to-r hover:from-pink-500/20 hover:to-blue-500/20 group overflow-hidden transform hover:scale-105">
+    
+    <div class="absolute left-0 w-1 h-8 bg-gradient-to-b from-pink-500 to-blue-500 rounded-r-full opacity-0 group-hover:opacity-100 transition-all duration-300"></div>
+    <div class="absolute inset-0 bg-pink-500 opacity-0 group-hover:opacity-10 transition-opacity duration-300"></div>
+    
+    <i class="fas fa-tachometer-alt text-gray-300 group-hover:text-pink-400 transition-colors duration-300 mr-3 z-10"></i>
+    <span class="text-gray-300 group-hover:text-white font-medium transition-all duration-300 z-10">Dashboard</span>
+    <i class="fas fa-chevron-right ml-auto text-xs text-transparent group-hover:text-pink-400 transition-all duration-300 transform translate-x-4 group-hover:translate-x-0 z-10"></i>
+  </a>
+
+  <!-- Vendor List -->
+  <a href="{% url 'vendor_list' %}" 
+     class="relative flex items-center px-4 py-3 rounded-lg transition-all duration-500 hover:bg-gradient-to-r hover:from-pink-500/20 hover:to-blue-500/20 group overflow-hidden transform hover:scale-105">
+    
+    <div class="absolute left-0 w-1 h-8 bg-gradient-to-b from-pink-500 to-blue-500 rounded-r-full opacity-0 group-hover:opacity-100 transition-all duration-300"></div>
+    <div class="absolute inset-0 bg-pink-500 opacity-0 group-hover:opacity-10 transition-opacity duration-300"></div>
+    
+    <i class="fas fa-users text-gray-300 group-hover:text-pink-400 transition-colors duration-300 mr-3 z-10"></i>
+    <span class="text-gray-300 group-hover:text-white font-medium transition-all duration-300 z-10">Vendor List</span>
+    <i class="fas fa-chevron-right ml-auto text-xs text-transparent group-hover:text-pink-400 transition-all duration-300 transform translate-x-4 group-hover:translate-x-0 z-10"></i>
+  </a>
+
+  <!-- Purchase Orders -->
+  <a href="{% url 'purchase_order_list' %}" 
+     class="relative flex items-center px-4 py-3 rounded-lg transition-all duration-500 hover:bg-gradient-to-r hover:from-pink-500/20 hover:to-blue-500/20 group overflow-hidden transform hover:scale-105">
+    
+    <div class="absolute left-0 w-1 h-8 bg-gradient-to-b from-pink-500 to-blue-500 rounded-r-full opacity-0 group-hover:opacity-100 transition-all duration-300"></div>
+    <div class="absolute inset-0 bg-pink-500 opacity-0 group-hover:opacity-10 transition-opacity duration-300"></div>
+    
+    <i class="fas fa-file-invoice-dollar text-gray-300 group-hover:text-pink-400 transition-colors duration-300 mr-3 z-10"></i>
+    <span class="text-gray-300 group-hover:text-white font-medium transition-all duration-300 z-10">Purchase Orders</span>
+    <i class="fas fa-chevron-right ml-auto text-xs text-transparent group-hover:text-pink-400 transition-all duration-300 transform translate-x-4 group-hover:translate-x-0 z-10"></i>
+  </a>
+
+</nav>
+    <!-- Sidebar Navigation end -->
+
+    <!-- Profile section -->
+    <div class="mt-auto pt-6 border-t border-blue-500/30">
+      <div class="flex items-center px-2 py-3 rounded-lg transition-all duration-300 hover:bg-blue-500/30 cursor-pointer">
+        <div class="w-10 h-10 rounded-full bg-blue-400/50 flex items-center justify-center mr-3">
+          <i class="fas fa-user text-lg"></i>
+        </div>
+        <div class="flex-1">
+          <p class="font-medium text-white">Admin User</p>
+          <p class="text-xs text-blue-200">Administrator</p>
+        </div>
+        <i class="fas fa-cog text-blue-200 hover:text-pink-200 transition-colors"></i>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Toggle function remains the same if needed
+    function toggleSidebar() {
+      document.getElementById('sidebar').classList.toggle('-translate-x-full');
+    }
+  </script>
+</body>
+</html>
+
+
+<!-- ✅ Transparent Navbar with Button on Slider -->
+<nav class="absolute top-0 right-0 z-50 m-4">
+  <a href="{% url 'home' %}" 
+     class="bg-indigo-600 text-white px-5 py-2 rounded-lg shadow-lg hover:bg-indigo-700 transition">
+    Home
+  </a>
+</nav>
+
+<!-- Main Content -->
+<div class="md:ml-64 min-h-screen transition-all duration-500">
+  {% block content %}
+  <!-- Page content goes here -->
+  {% endblock %}
+</div>
+
+<!-- Dark Mode Toggle -->
+<button id="theme-toggle" class="fixed bottom-6 right-6 w-12 h-12 rounded-full bg-indigo-600 text-white shadow-lg flex items-center justify-center hover:bg-indigo-700 transition-all z-50">
+  <i class="fas fa-moon dark:hidden"></i>
+  <i class="fas fa-sun hidden dark:block"></i>
+</button>
+
+<!-- Scripts -->
+<script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+<script>
+  // Sidebar toggle
+  function toggleSidebar() {
+    const sidebar = document.getElementById('sidebar');
+    sidebar.classList.toggle('-translate-x-full');
+  }
+
+  // Dark mode toggle
+  document.getElementById('theme-toggle').addEventListener('click', () => {
+    document.documentElement.classList.toggle('dark');
+    localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
+  });
+
+  // Initialize particles.js
+  particlesJS("particles-js", {
+    "particles": {
+      "number": {
+        "value": 80,
+        "density": {
+          "enable": true,
+          "value_area": 800
+        }
+      },
+      "color": {
+        "value": "#6366f1"
+      },
+      "shape": {
+        "type": "circle",
+        "stroke": {
+          "width": 0,
+          "color": "#000000"
+        }
+      },
+      "opacity": {
+        "value": 0.5,
+        "random": true,
+        "anim": {
+          "enable": true,
+          "speed": 1,
+          "opacity_min": 0.1,
+          "sync": false
+        }
+      },
+      "size": {
+        "value": 3,
+        "random": true,
+        "anim": {
+          "enable": true,
+          "speed": 2,
+          "size_min": 0.1,
+          "sync": false
+        }
+      },
+      "line_linked": {
+        "enable": true,
+        "distance": 150,
+        "color": "#6366f1",
+        "opacity": 0.4,
+        "width": 1
+      },
+      "move": {
+        "enable": true,
+        "speed": 1,
+        "direction": "none",
+        "random": true,
+        "straight": false,
+        "out_mode": "out",
+        "bounce": false,
+        "attract": {
+          "enable": false,
+          "rotateX": 600,
+          "rotateY": 1200
+        }
+      }
+    },
+    "interactivity": {
+      "detect_on": "canvas",
+      "events": {
+        "onhover": {
+          "enable": true,
+          "mode": "grab"
+        },
+        "onclick": {
+          "enable": true,
+          "mode": "push"
+        },
+        "resize": true
+      },
+      "modes": {
+        "grab": {
+          "distance": 140,
+          "line_linked": {
+            "opacity": 1
+          }
+        },
+        "push": {
+          "particles_nb": 4
+        }
+      }
+    },
+    "retina_detect": true
+  });
+
+  // Check for saved theme preference
+  if (localStorage.getItem('theme') === 'dark' || (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+    document.documentElement.classList.add('dark');
+  } else {
+    document.documentElement.classList.remove('dark');
+  }
+</script>
+
+<!-- Custom Animations -->
+<style>
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  
+  @keyframes slideIn {
+    from { transform: translateX(-20px); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+  }
+  
+  .animate-float {
+    animation: float 3s ease-in-out infinite;
+  }
+  
+  .sidebar-link {
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .theme-toggle {
+    box-shadow: 0 0 10px rgba(99, 102, 241, 0.5);
+  }
+  
+  .theme-toggle:hover {
+    transform: rotate(30deg);
+  }
+</style>
+</body>
+</html>

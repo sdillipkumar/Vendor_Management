@@ -1,0 +1,69 @@
+<!-- dashboard/_vendor_cards.html -->
+
+<section class="p-6">
+  <h2 class="text-2xl font-bold mb-4 text-gray-800">Vendors</h2>
+
+  <div class="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4" id="vendorCardsGrid">
+    {% for vendor in page_obj %}
+      <a href="{% url 'vendor_detail' vendor.pk %}" class="block">
+        <div class="bg-white shadow-lg rounded-2xl p-5 transition-all duration-300 transform hover:-translate-y-1 hover:shadow-xl">
+          <div class="mb-4">
+            <h3 class="text-xl font-semibold text-indigo-700">{{ vendor.name }}</h3>
+            <p class="text-sm text-gray-500">{{ vendor.vendor_code }}</p>
+          </div>
+
+          <div class="text-sm text-gray-600 mb-2">
+            <p><strong>Contact:</strong> {{ vendor.contact_details }}</p>
+            <p><strong>Address:</strong> {{ vendor.address }}</p>
+          </div>
+
+          <div class="border-t pt-3 mt-3 text-sm space-y-1">
+            <p>
+              <strong>On-Time Delivery:</strong>
+              <span class="text-green-600 font-medium">{{ vendor.on_time_delivery_rate }}%</span>
+            </p>
+            <p>
+              <strong>Quality Rating:</strong>
+              <span class="text-yellow-500 font-medium">{{ vendor.quality_rating_avg }}/5</span>
+            </p>
+            <p>
+              <strong>Response Time:</strong>
+              <span class="text-blue-500 font-medium">{{ vendor.average_response_time }} hrs</span>
+            </p>
+            <p>
+              <strong>Fulfillment Rate:</strong>
+              <span class="text-purple-600 font-medium">{{ vendor.fulfillment_rate }}%</span>
+            </p>
+          </div>
+        </div>
+      </a>
+    {% empty %}
+      <p class="text-gray-500 col-span-full">No vendors available.</p>
+    {% endfor %}
+  </div>
+
+  <!-- Dynamic Pagination -->
+  <div class="flex justify-center mt-8" id="pagination">
+    <nav class="flex items-center space-x-2">
+      {% if page_obj.has_previous %}
+        <button class="pagination-btn px-4 py-2 rounded-lg border" data-page="{{ page_obj.previous_page_number }}">
+          <i class="fas fa-chevron-left"></i>
+        </button>
+      {% endif %}
+
+      {% for num in page_obj.paginator.page_range %}
+        {% if page_obj.number == num %}
+          <button class="px-4 py-2 rounded-lg bg-indigo-600 text-white">{{ num }}</button>
+        {% else %}
+          <button class="pagination-btn px-4 py-2 rounded-lg border" data-page="{{ num }}">{{ num }}</button>
+        {% endif %}
+      {% endfor %}
+
+      {% if page_obj.has_next %}
+        <button class="pagination-btn px-4 py-2 rounded-lg border" data-page="{{ page_obj.next_page_number }}">
+          <i class="fas fa-chevron-right"></i>
+        </button>
+      {% endif %}
+    </nav>
+  </div>
+</section>

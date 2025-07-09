@@ -1,0 +1,248 @@
+
+{% load math_filters %}
+{% block content %}
+
+<div class="p-6 animate-fade-in">
+  <!-- Header Section -->
+  <div class="mb-8">
+    <h1 class="text-3xl font-bold text-gray-800 dark:text-white mb-2">Performance Analytics: {{ vendor.name }}</h1>
+    <div class="flex items-center space-x-4">
+      <span class="px-3 py-1 bg-indigo-100 dark:bg-indigo-900 text-indigo-800 dark:text-indigo-200 rounded-full text-sm font-medium">
+        Vendor Code: {{ vendor.vendor_code }}
+      </span>
+      <span class="text-gray-500 dark:text-gray-400 text-sm">
+        <i class="fas fa-calendar-alt mr-1"></i> Last Updated: {% now "F j, Y" %}
+      </span>
+    </div>
+  </div>
+
+  <!-- Performance Metrics Grid -->
+  
+  <!-- Charts Section -->
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+    <!-- Delivery Trends Chart -->
+    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6 animate-slide-in-left">
+      <h2 class="text-xl font-semibold text-gray-800 dark:text-white mb-4">Delivery Rate Trends</h2>
+      <canvas id="deliveryChart" height="250"></canvas>
+    </div>
+
+    <!-- Quality Trends Chart -->
+    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6 animate-slide-in-right">
+      <h2 class="text-xl font-semibold text-gray-800 dark:text-white mb-4">Quality Rating History</h2>
+      <canvas id="qualityChart" height="250"></canvas>
+    </div>
+  </div>
+
+  <!-- Comparative Analysis -->
+  <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6 mb-8 animate-fade-in">
+    <h2 class="text-xl font-semibold text-gray-800 dark:text-white mb-4">Comparative Analysis</h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div>
+        <h3 class="text-lg font-medium text-gray-700 dark:text-gray-300 mb-3">Vs Company Average</h3>
+        <div class="space-y-4">
+          <div>
+            <div class="flex justify-between mb-1">
+              <span class="text-sm font-medium text-gray-600 dark:text-gray-400">Delivery Rate</span>
+              <span class="text-sm font-medium">{{ vendor.on_time_delivery_rate }}% (You) vs 85% (Avg)</span>
+            </div>
+            <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2.5">
+              <div class="bg-indigo-600 h-2.5 rounded-full" style="width: {{ vendor.on_time_delivery_rate }}%"></div>
+              <div class="bg-gray-400 h-2.5 rounded-full -mt-2.5" style="width: 85%"></div>
+            </div>
+          </div>
+          <div>
+            <div class="flex justify-between mb-1">
+              <span class="text-sm font-medium text-gray-600 dark:text-gray-400">Quality Rating</span>
+              <span class="text-sm font-medium">{{ vendor.quality_rating_avg }}/5 (You) vs 4.2/5 (Avg)</span>
+            </div>
+            <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2.5">
+              <div class="bg-green-600 h-2.5 rounded-full" style="width: {{ vendor.quality_rating_avg|multiply:20 }}%"></div>
+              <div class="bg-gray-400 h-2.5 rounded-full -mt-2.5" style="width: 84%"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <h3 class="text-lg font-medium text-gray-700 dark:text-gray-300 mb-3">Vs Top Performer</h3>
+        <div class="space-y-4">
+          <div>
+            <div class="flex justify-between mb-1">
+              <span class="text-sm font-medium text-gray-600 dark:text-gray-400">Delivery Rate</span>
+              <span class="text-sm font-medium">{{ vendor.on_time_delivery_rate }}% (You) vs 98% (Top)</span>
+            </div>
+            <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2.5">
+              <div class="bg-indigo-600 h-2.5 rounded-full" style="width: {{ vendor.on_time_delivery_rate }}%"></div>
+              <div class="bg-gray-400 h-2.5 rounded-full -mt-2.5" style="width: 98%"></div>
+            </div>
+          </div>
+          <div>
+            <div class="flex justify-between mb-1">
+              <span class="text-sm font-medium text-gray-600 dark:text-gray-400">Quality Rating</span>
+              <span class="text-sm font-medium">{{ vendor.quality_rating_avg }}/5 (You) vs 4.8/5 (Top)</span>
+            </div>
+            <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2.5">
+              <div class="bg-green-600 h-2.5 rounded-full" style="width: {{ vendor.quality_rating_avg|multiply:20 }}%"></div>
+              <div class="bg-gray-400 h-2.5 rounded-full -mt-2.5" style="width: 96%"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Performance Logs -->
+  <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden animate-fade-in">
+    <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
+      <h2 class="text-xl font-semibold text-gray-800 dark:text-white">Performance History</h2>
+    </div>
+    <div class="overflow-x-auto">
+      <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+        <thead class="bg-gray-50 dark:bg-gray-700">
+          <tr>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Date</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">PO Number</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Delivery Status</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Quality Rating</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Response Time</th>
+          </tr>
+        </thead>
+        <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+          {% for log in performance_logs %}
+          <tr class="hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">{{ log.date|date:"M d, Y" }}</td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-indigo-600 dark:text-indigo-400">#{{ log.po_number }}</td>
+            <td class="px-6 py-4 whitespace-nowrap">
+              <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
+                {% if log.delivery_status == 'On Time' %}bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200
+                {% elif log.delivery_status == 'Late' %}bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200
+                {% else %}bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200{% endif %}">
+                {{ log.delivery_status }}
+              </span>
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
+              <div class="flex items-center">
+                {% for i in "12345" %}
+                  <i class="fas fa-star text-{% if forloop.counter <= log.quality_rating %}yellow-400{% else %}gray-300 dark:text-gray-500{% endif %} mr-1"></i>
+                {% endfor %}
+                <span class="ml-1">({{ log.quality_rating }})</span>
+              </div>
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">{{ log.response_time }}h</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- Chart.js Implementation -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // Delivery Rate Chart
+  const deliveryCtx = document.getElementById('deliveryChart').getContext('2d');
+  const deliveryChart = new Chart(deliveryCtx, {
+    type: 'line',
+    data: {
+      labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+      datasets: [{
+        label: 'On-Time Delivery Rate',
+        data: [85, 82, 83, 87, 86, 89, 90, 88, 91, 92, 93, 94],
+        borderColor: '#6366F1',
+        backgroundColor: 'rgba(99, 102, 241, 0.1)',
+        borderWidth: 2,
+        tension: 0.3,
+        fill: true
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: {
+          position: 'top',
+        },
+        tooltip: {
+          mode: 'index',
+          intersect: false,
+        }
+      },
+      scales: {
+        y: {
+          beginAtZero: false,
+          min: 75,
+          max: 100,
+          ticks: {
+            callback: function(value) {
+              return value + '%';
+            }
+          }
+        }
+      }
+    }
+  });
+
+  // Quality Rating Chart
+  const qualityCtx = document.getElementById('qualityChart').getContext('2d');
+  const qualityChart = new Chart(qualityCtx, {
+    type: 'bar',
+    data: {
+      labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+      datasets: [{
+        label: 'Quality Rating',
+        data: [4.2, 4.3, 4.1, 4.4, 4.5, 4.3, 4.6, 4.5, 4.7, 4.6, 4.8, 4.7],
+        backgroundColor: 'rgba(16, 185, 129, 0.7)',
+        borderColor: 'rgba(16, 185, 129, 1)',
+        borderWidth: 1
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: {
+          position: 'top',
+        }
+      },
+      scales: {
+        y: {
+          beginAtZero: true,
+          max: 5,
+          ticks: {
+            stepSize: 0.5
+          }
+        }
+      }
+    }
+  });
+});
+</script>
+
+<style>
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  
+  @keyframes slideInLeft {
+    from { opacity: 0; transform: translateX(-20px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+  
+  @keyframes slideInRight {
+    from { opacity: 0; transform: translateX(20px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+  
+  .animate-fade-in {
+    animation: fadeIn 0.6s ease-out forwards;
+  }
+  
+  .animate-slide-in-left {
+    animation: slideInLeft 0.6s ease-out forwards;
+  }
+  
+  .animate-slide-in-right {
+    animation: slideInRight 0.6s ease-out forwards;
+  }
+</style>
+{% endblock %}

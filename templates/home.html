@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% block content %}
+{% load static %}
+
+
+<!-- Hero Slider Section -->
+<div x-data="{ currentSlide: 1 }" class="relative overflow-hidden h-screen">
+
+  <!-- Slides Wrapper -->
+  <div class="flex transition-transform duration-700 ease-in-out h-full"
+       :style="'transform: translateX(-' + (currentSlide - 1) * 100 + '%)'">
+    
+    <!-- Slide 1 -->
+    <div class="min-w-full h-full bg-cover bg-center" style="background-image: url('{% static "images/vendor_meeting.jpg" %}')">
+      <div class="flex flex-col items-center justify-center h-full bg-black bg-opacity-50 text-white text-center px-4">
+        <h2 class="text-4xl md:text-6xl font-bold mb-4">Smart Vendor Management System</h2>
+        <p class="text-lg md:text-xl font-light">Streamline vendor processes and boost efficiency</p>
+      </div>
+    </div>
+
+    <!-- Slide 2 -->
+    <div class="min-w-full h-full bg-cover bg-center" style="background-image: url('{% static "images/analytics_dashboard.jpg" %}')">
+      <div class="flex flex-col items-center justify-center h-full bg-black bg-opacity-50 text-white text-center px-4">
+        <h2 class="text-4xl md:text-6xl font-bold mb-4">Performance Tracking</h2>
+        <p class="text-lg md:text-xl font-light">Measure vendor KPIs in real time</p>
+      </div>
+    </div>
+
+    <!-- Slide 3 -->
+    <div class="min-w-full h-full bg-cover bg-center" style="background-image: url('{% static "images/purchase_order.jpg" %}')">
+      <div class="flex flex-col items-center justify-center h-full bg-black bg-opacity-50 text-white text-center px-4">
+        <h2 class="text-4xl md:text-6xl font-bold mb-4">Purchase Orders</h2>
+        <p class="text-lg md:text-xl font-light">Automate and manage your POs seamlessly</p>
+      </div>
+    </div>
+
+    <!-- Slide 4 -->
+    <div class="min-w-full h-full bg-cover bg-center" style="background-image: url('{% static "images/vendor_rating.jpg" %}')">
+      <div class="flex flex-col items-center justify-center h-full bg-black bg-opacity-50 text-white text-center px-4">
+        <h2 class="text-4xl md:text-6xl font-bold mb-4">Vendor Rating</h2>
+        <p class="text-lg md:text-xl font-light">Rate vendors based on performance & delivery</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Navigation Buttons -->
+  <div class="absolute inset-0 flex items-center justify-between px-6 z-10">
+    <button @click="currentSlide = currentSlide === 1 ? 4 : currentSlide - 1"
+            class="text-white text-3xl hover:text-pink-300 transition">❮</button>
+    <button @click="currentSlide = currentSlide === 4 ? 1 : currentSlide + 1"
+            class="text-white text-3xl hover:text-pink-300 transition">❯</button>
+  </div>
+
+  <!-- Go to Dashboard Button -->
+  <div class="absolute bottom-10 w-full flex justify-center z-10">
+    <a href="{% url 'dashboard' %}"
+       class="bg-indigo-600 text-white px-8 py-3 text-lg font-semibold rounded-lg shadow-lg hover:bg-indigo-700 transition">
+      Go to Dashboard
+    </a>
+  </div>
+
+  <!-- Optional Dark Overlay -->
+  <div class="absolute inset-0 bg-black bg-opacity-40 z-0"></div>
+
+</div>
+
+{% endblock %}
