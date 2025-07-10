@@ -1,0 +1,27 @@
+# Python
+*.pyc
+__pycache__/
+
+# Django media/static artifacts
+/media/
+/staticfiles/
+/vendor_logos/
+
+# Virtual environments
+.env
+venv/
+ENV/
+env/
+
+# VS Code
+.vscode/
+
+# Pytest cache
+.pytest_cache/
+
+# Logs
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
