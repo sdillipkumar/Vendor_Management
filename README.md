@@ -71,3 +71,9 @@ python manage.py runserver
 4.Create a superuser for admin login:
 
 python manage.py createsuperuser
+![index 1](https://github.com/user-attachments/assets/5d428f25-a51a-4031-a7d6-753ce588176a)
+
+![Dashboard](https://github.com/user-attachments/assets/2394b4d0-58be-46cb-beb1-31d87e9a142f)
+
+![vendor_list](https://github.com/user-attachments/assets/3e53e876-2014-4a72-a4f2-9443ece10052)
+
